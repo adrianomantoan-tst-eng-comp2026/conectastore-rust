@@ -30,11 +30,14 @@ fn should_return_recommendations_without_duplicates() {
 
     graph.add_edge(Vertex::Product(1), Vertex::Product(3), 0.8);
     graph.add_edge(Vertex::Product(2), Vertex::Product(3), 0.7);
+    graph.add_edge(Vertex::Product(2), Vertex::Product(4), 0.6);
 
     let recommendations = recommend_products(&graph, client, 2);
 
-    assert_eq!(recommendations.len(), 3);
-    assert!(recommendations.contains(&1));
-    assert!(recommendations.contains(&2));
+    assert_eq!(recommendations.len(), 2);
     assert!(recommendations.contains(&3));
+    assert!(recommendations.contains(&4));
+
+    assert!(!recommendations.contains(&1));
+    assert!(!recommendations.contains(&2));
 }

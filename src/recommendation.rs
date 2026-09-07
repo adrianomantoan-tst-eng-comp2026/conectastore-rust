@@ -22,12 +22,20 @@ pub fn recommend_products(
         if let Some(neighbors) = graph.neighbors(current) {
             for edge in neighbors {
                 let next = edge.destination;
+                let next_depth = depth + 1;
 
                 if visited.insert(next) {
-                    queue.push_back((next, depth + 1));
+                    queue.push_back((next, next_depth));
 
                     if let Vertex::Product(product_id) = next {
-                        recommendations.push(product_id);
+                        let should_recommend = match start {
+                            Vertex::Client(_) => next_depth > 1,
+                            Vertex::Product(_) => true,
+                        };
+
+                        if should_recommend {
+                            recommendations.push(product_id);
+                        }
                     }
                 }
             }
