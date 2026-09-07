@@ -41,3 +41,27 @@ fn should_return_recommendations_without_duplicates() {
     assert!(!recommendations.contains(&1));
     assert!(!recommendations.contains(&2));
 }
+
+#[test]
+fn should_recommend_from_product() {
+    let mut graph = Graph::new();
+
+    graph.add_edge(
+        Vertex::Product(1),
+        Vertex::Product(2),
+        0.9,
+    );
+
+    graph.add_edge(
+        Vertex::Product(2),
+        Vertex::Product(3),
+        0.8,
+    );
+
+    let recommendations =
+        recommend_products(&graph, Vertex::Product(1), 2);
+
+    assert_eq!(recommendations.len(), 2);
+    assert!(recommendations.contains(&2));
+    assert!(recommendations.contains(&3));
+}
