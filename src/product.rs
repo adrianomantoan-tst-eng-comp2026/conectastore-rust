@@ -42,3 +42,38 @@ impl ProductCatalog {
         self.products.len()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn should_create_product() {
+        let product = Product::new(
+            1,
+            "Notebook Gamer",
+            "Informática",
+            7990.00,
+        );
+
+        assert_eq!(product.id, 1);
+        assert_eq!(product.name, "Notebook Gamer");
+        assert_eq!(product.category, "Informática");
+        assert_eq!(product.price, 7990.00);
+    }
+
+    #[test]
+    fn should_add_product_to_catalog() {
+        let mut catalog = ProductCatalog::new();
+
+        catalog.add_product(Product::new(
+            1,
+            "Mouse Gamer",
+            "Informática",
+            299.00,
+        ));
+
+        assert_eq!(catalog.total_products(), 1);
+        assert!(catalog.get_product(1).is_some());
+    }
+}
