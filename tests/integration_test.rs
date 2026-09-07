@@ -1,4 +1,4 @@
-use conectastore_rust::graph::Graph;
+use conectastore_rust::graph::{Graph, Vertex};
 use conectastore_rust::product::{Product, ProductCatalog};
 use conectastore_rust::recommendation::recommend_products;
 
@@ -10,7 +10,7 @@ fn should_register_and_find_product() {
         1,
         "Notebook Gamer",
         "Informática",
-        4500.00,
+        7990.00,
     ));
 
     let product = catalog.get_product(1);
@@ -23,15 +23,18 @@ fn should_register_and_find_product() {
 fn should_return_recommendations_without_duplicates() {
     let mut graph = Graph::new();
 
-    graph.add_edge(1, 2, 0.9);
-    graph.add_edge(1, 3, 0.8);
-    graph.add_edge(2, 4, 0.7);
-    graph.add_edge(3, 4, 0.6);
+    let client = Vertex::Client(100);
 
-    let recommendations = recommend_products(&graph, 1, 2);
+    graph.add_edge(client, Vertex::Product(1), 1.0);
+    graph.add_edge(client, Vertex::Product(2), 0.9);
+
+    graph.add_edge(Vertex::Product(1), Vertex::Product(3), 0.8);
+    graph.add_edge(Vertex::Product(2), Vertex::Product(3), 0.7);
+
+    let recommendations = recommend_products(&graph, client, 2);
 
     assert_eq!(recommendations.len(), 3);
+    assert!(recommendations.contains(&1));
     assert!(recommendations.contains(&2));
     assert!(recommendations.contains(&3));
-    assert!(recommendations.contains(&4));
 }

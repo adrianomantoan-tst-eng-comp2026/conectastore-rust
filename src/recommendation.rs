@@ -1,8 +1,12 @@
 use std::collections::{HashSet, VecDeque};
 
-use crate::graph::Graph;
+use crate::graph::{Graph, Vertex};
 
-pub fn recommend_products(graph: &Graph, start: u32, max_depth: usize) -> Vec<u32> {
+pub fn recommend_products(
+    graph: &Graph,
+    start: Vertex,
+    max_depth: usize,
+) -> Vec<u32> {
     let mut visited = HashSet::new();
     let mut queue = VecDeque::new();
     let mut recommendations = Vec::new();
@@ -22,8 +26,8 @@ pub fn recommend_products(graph: &Graph, start: u32, max_depth: usize) -> Vec<u3
                 if visited.insert(next) {
                     queue.push_back((next, depth + 1));
 
-                    if next != start {
-                        recommendations.push(next);
+                    if let Vertex::Product(product_id) = next {
+                        recommendations.push(product_id);
                     }
                 }
             }

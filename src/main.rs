@@ -1,4 +1,4 @@
-use conectastore_rust::graph::Graph;
+use conectastore_rust::graph::{Graph, Vertex};
 use conectastore_rust::product::{Product, ProductCatalog};
 use conectastore_rust::recommendation::recommend_products;
 
@@ -16,51 +16,47 @@ fn main() {
         2,
         "Mouse Gamer",
         "Informática",
-        199.00,
+        299.00,
     ));
 
     catalog.add_product(Product::new(
         3,
         "Teclado Mecânico",
         "Informática",
-        415.00,
+        299.00,
     ));
 
     catalog.add_product(Product::new(
         4,
         "Monitor 27 Polegadas",
         "Informática",
-        1790.00,
+        1699.00,
     ));
 
     catalog.add_product(Product::new(
         5,
         "Headset Gamer",
         "Áudio",
-        383.00,
+        393.00,
     ));
 
     let mut graph = Graph::new();
 
-    graph.add_edge(1, 2, 0.9);
-    graph.add_edge(1, 3, 0.8);
-    graph.add_edge(2, 4, 0.7);
-    graph.add_edge(3, 5, 0.6);
+    let client = Vertex::Client(100);
 
-    let product_id = 1;
+    graph.add_edge(client, Vertex::Product(1), 1.0);
+    graph.add_edge(client, Vertex::Product(2), 0.9);
+
+    graph.add_edge(Vertex::Product(1), Vertex::Product(3), 0.8);
+    graph.add_edge(Vertex::Product(2), Vertex::Product(4), 0.7);
+    graph.add_edge(Vertex::Product(3), Vertex::Product(5), 0.6);
 
     println!("=== ConectaStore ===");
-
-    if let Some(product) = catalog.get_product(product_id) {
-        println!(
-            "Produto selecionado: {} - {}",
-            product.id, product.name
-        );
-    }
+    println!("Cliente selecionado: 100");
 
     println!("\nProdutos recomendados:");
 
-    let recommendations = recommend_products(&graph, product_id, 2);
+    let recommendations = recommend_products(&graph, client, 2);
 
     for id in recommendations {
         if let Some(product) = catalog.get_product(id) {

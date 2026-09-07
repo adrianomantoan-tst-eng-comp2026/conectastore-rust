@@ -1,13 +1,19 @@
 use std::collections::HashMap;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Vertex {
+    Client(u32),
+    Product(u32),
+}
+
 #[derive(Debug, Clone)]
 pub struct Edge {
-    pub destination: u32,
+    pub destination: Vertex,
     pub weight: f64,
 }
 
 pub struct Graph {
-    adjacency_list: HashMap<u32, Vec<Edge>>,
+    adjacency_list: HashMap<Vertex, Vec<Edge>>,
 }
 
 impl Graph {
@@ -17,11 +23,11 @@ impl Graph {
         }
     }
 
-    pub fn add_vertex(&mut self, vertex_id: u32) {
-        self.adjacency_list.entry(vertex_id).or_default();
+    pub fn add_vertex(&mut self, vertex: Vertex) {
+        self.adjacency_list.entry(vertex).or_default();
     }
 
-    pub fn add_edge(&mut self, source: u32, destination: u32, weight: f64) {
+    pub fn add_edge(&mut self, source: Vertex, destination: Vertex, weight: f64) {
         self.add_vertex(source);
         self.add_vertex(destination);
 
@@ -33,8 +39,8 @@ impl Graph {
         }
     }
 
-    pub fn neighbors(&self, vertex_id: u32) -> Option<&Vec<Edge>> {
-        self.adjacency_list.get(&vertex_id)
+    pub fn neighbors(&self, vertex: Vertex) -> Option<&Vec<Edge>> {
+        self.adjacency_list.get(&vertex)
     }
 
     pub fn total_vertices(&self) -> usize {
