@@ -23,6 +23,12 @@ pub struct ProductCatalog {
     products: HashMap<u32, Product>,
 }
 
+impl Default for ProductCatalog {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ProductCatalog {
     pub fn new() -> Self {
         Self {

@@ -16,6 +16,12 @@ pub struct Graph {
     adjacency_list: HashMap<Vertex, Vec<Edge>>,
 }
 
+impl Default for Graph {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Graph {
     pub fn new() -> Self {
         Self {
